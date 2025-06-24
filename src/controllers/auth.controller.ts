@@ -14,10 +14,11 @@ const signUp = async (req: Request, res: Response, next: NextFunction) => {
       password,
     });
 
-    // Set cookies
+    // Set cookies with SameSite=None and secure flag
     res.cookie('accessToken', accessToken, {
       httpOnly: true,
       secure: !dev,
+      sameSite: 'none',
       maxAge: 15 * 60 * 1000, // 15 minutes
     });
 
@@ -50,10 +51,11 @@ const signIn = async (req: Request, res: Response, next: NextFunction) => {
       password
     );
 
-    // Set cookies
+    // Set cookies with SameSite=None and secure flag
     res.cookie('accessToken', accessToken, {
       httpOnly: true,
       secure: !dev,
+      sameSite: 'none',
       maxAge: 15 * 60 * 1000, // 15 minutes
     });
 
@@ -81,6 +83,8 @@ const signOut = async (req: Request, res: Response) => {
   res.cookie('accessToken', 'none', {
     expires: new Date(Date.now() + 5 * 1000),
     httpOnly: true,
+    secure: !dev,
+    sameSite: 'none',
   });
 
 
@@ -98,6 +102,8 @@ const deleteAccount = async (req: AuthRequest, res: Response, next: NextFunction
     res.cookie('accessToken', 'none', {
       expires: new Date(Date.now() + 5 * 1000),
       httpOnly: true,
+      secure: !dev,
+      sameSite: 'none',
     });
 
     res.status(OK).json({

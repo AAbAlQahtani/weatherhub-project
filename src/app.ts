@@ -27,10 +27,28 @@ connectDB();
 const app: Express = express();
 
 // Middleware
+
+
+
+
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:3000', 
+  'https://weatherhub-frontend.onrender.com' 
+];
+
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || 'http://localhost:3000' || 'https://weatherhub-frontend.onrender.com',
-  credentials: true
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
 }));
+
+
 app.use(helmet());
 app.use(morgan('tiny', {
   stream: {
